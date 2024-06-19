@@ -24,6 +24,7 @@ import { packet } from '../diagrams/packet/detector.js';
 import block from '../diagrams/block/blockDetector.js';
 import { registerLazyLoadedDiagrams } from './detectType.js';
 import { registerDiagram } from './diagramAPI.js';
+import { railroad } from '../diagrams/railroad/railroadDetector.js';
 
 let hasLoadedDiagrams = false;
 export const addDiagrams = () => {
@@ -88,6 +89,7 @@ export const addDiagrams = () => {
     journey,
     quadrantChart,
     sankey,
+    railroad,
     packet,
     xychart,
     block
