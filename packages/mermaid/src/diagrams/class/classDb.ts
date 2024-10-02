@@ -27,7 +27,7 @@ const MERMAID_DOM_ID_PREFIX = 'classId-';
 
 let relations: ClassRelation[] = [];
 let classes = new Map<string, ClassNode>();
-let notes: ClassNote[] = [];
+let notes = new Map<string, ClassNote>();
 let classCounter = 0;
 let namespaces = new Map<string, NamespaceNode>();
 let namespaceCounter = 0;
@@ -108,7 +108,7 @@ export const lookUpDomId = function (_id: string): string {
 export const clear = function () {
   relations = [];
   classes = new Map();
-  notes = [];
+  notes = new Map();
   functions = [];
   functions.push(setupToolTips);
   namespaces = new Map();
@@ -127,6 +127,11 @@ export const getClasses = function (): ClassMap {
 
 export const getRelations = function (): ClassRelation[] {
   return relations;
+};
+
+export const getNote = function (id: string | number) {
+  const key = typeof id === 'number' ? `note${id}` : id;
+  return notes.get(key)!;
 };
 
 export const getNotes = function () {
@@ -200,12 +205,15 @@ export const addMembers = function (className: string, members: string[]) {
 };
 
 export const addNote = function (text: string, className: string) {
+  const index = notes.size;
   const note = {
-    id: `note${notes.length}`,
+    id: `note${index}`,
     class: className,
     text: text,
+    index: index,
   };
-  notes.push(note);
+  notes.set(note.id, note);
+  return note.id;
 };
 
 export const cleanupLabel = function (label: string) {
@@ -425,6 +433,7 @@ export const addNamespace = function (id: string) {
   namespaces.set(id, {
     id: id,
     classes: new Map(),
+    notes: new Map(),
     children: {},
     domId: MERMAID_DOM_ID_PREFIX + id + '-' + namespaceCounter,
   } as NamespaceNode);
@@ -447,14 +456,24 @@ const getNamespaces = function (): NamespaceMap {
  * @param classNames - Ids of the class to add
  * @public
  */
-export const addClassesToNamespace = function (id: string, classNames: string[]) {
+export const addClassesToNamespace = function (
+  id: string,
+  classNames: string[],
+  noteNames: string[]
+) {
   if (!namespaces.has(id)) {
     return;
   }
   for (const name of classNames) {
     const { className } = splitClassNameAndType(name);
-    classes.get(className)!.parent = id;
-    namespaces.get(id)!.classes.set(className, classes.get(className)!);
+    const classNode = getClass(className);
+    classNode.parent = id;
+    namespaces.get(id)!.classes.set(className, classNode);
+  }
+  for (const noteName of noteNames) {
+    const noteNode = getNote(noteName);
+    noteNode.parent = id;
+    namespaces.get(id)!.notes.set(noteName, noteNode);
   }
 };
 
@@ -483,6 +502,7 @@ export default {
   clear,
   getClass,
   getClasses,
+  getNote,
   getNotes,
   addAnnotation,
   addNote,
