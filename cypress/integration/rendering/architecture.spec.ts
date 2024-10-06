@@ -98,10 +98,10 @@ describe('architecture diagram', () => {
                 service bottom_disk(disk)[Disk] in bottom_group
                 service center_disk(disk)[Disk] in center_group
 
-                left_disk{group} (R--L) center_disk{group}
-                right_disk{group} (L--R) center_disk{group}
-                top_disk{group} (B--T) center_disk{group}
-                bottom_disk{group} (T--B) center_disk{group}
+                left_disk{group}:R <--> L:center_disk{group}
+                right_disk{group}:L <--> R:center_disk{group}
+                top_disk{group}:B <--> T:center_disk{group}
+                bottom_disk{group}:T <--> B:center_disk{group}
             `
     );
   });
@@ -197,8 +197,7 @@ describe('architecture diagram', () => {
   });
 });
 
-// Skipped as the layout is not deterministic, and causes issues in E2E tests.
-describe.skip('architecture - external', () => {
+describe('architecture - external', () => {
   it('should allow adding external icons', () => {
     urlSnapshotTest('http://localhost:9000/architecture-external.html');
   });
