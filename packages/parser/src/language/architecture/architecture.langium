@@ -3,8 +3,8 @@ import "../common/common";
 
 entry Architecture:
     NEWLINE*
-    "architecture-beta"
-    NEWLINE* TitleAndAccessibilities? Statement*
+    "architecture-beta" EOL
+    TitleAndAccessibilities? Statement*
 ;
 
 fragment Statement:
@@ -46,6 +46,8 @@ terminal ARROW_DIRECTION: 'L' | 'R' | 'T' | 'B';
 terminal ARCH_ID: /[\w]+/;
 terminal ARCH_TEXT_ICON: /\("[^"]+"\)/;
 terminal ARCH_ICON: /\([\w-:]+\)/;
-terminal ARCH_TITLE: /\[[^\]]+\]/;
+terminal fragment ARCH_TITLE_MARKDOWN: '["`' -> '`"]';
+terminal fragment ARCH_TITLE_SIMPLE: /\[([\w ]+|"([^"]|\\")+")\]/;
+terminal ARCH_TITLE: ARCH_TITLE_MARKDOWN | ARCH_TITLE_SIMPLE;
 terminal ARROW_GROUP: /\{group\}/;
 terminal ARROW_INTO: /<|>/;
