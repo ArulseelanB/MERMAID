@@ -54,8 +54,6 @@ export function markdownToLines(markdown: string, config: MermaidConfig = {}): M
       node.tokens.forEach((contentNode) => {
         processNode(contentNode as MarkedToken, parentType);
       });
-    } else {
-      lines[currentLine].push({ content: node.raw, type: parentType });
     }
   }
 
