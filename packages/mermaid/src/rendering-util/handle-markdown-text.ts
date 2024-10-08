@@ -91,8 +91,11 @@ export function markdownToHTML(markdown: string, { markdownAutoWrap }: MermaidCo
       return '';
     } else if (node.type === 'html') {
       return `${node.text}`;
+    } else if (node.type === 'link') {
+      return node.tokens?.map(output).join('') ?? node.text;
+    } else {
+      return `Unsupported markdown: ${node.type}`;
     }
-    return `Unsupported markdown: ${node.type}`;
   }
 
   return nodes.map(output).join('');
