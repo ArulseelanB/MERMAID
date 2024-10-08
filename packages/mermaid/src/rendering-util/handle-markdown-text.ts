@@ -50,6 +50,12 @@ export function markdownToLines(markdown: string, config: MermaidConfig = {}): M
       });
     } else if (node.type === 'html') {
       lines[currentLine].push({ content: node.text, type: 'normal' });
+    } else if (node.type === 'link') {
+      node.tokens.forEach((contentNode) => {
+        processNode(contentNode as MarkedToken, parentType);
+      });
+    } else {
+      lines[currentLine].push({ content: node.raw, type: parentType })
     }
   }
 

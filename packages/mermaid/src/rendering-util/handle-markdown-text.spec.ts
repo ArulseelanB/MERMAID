@@ -307,3 +307,9 @@ test('markdownToHTML - auto wrapping', () => {
     )
   ).toMatchInlineSnapshot('"<p>Hello, how do<br/>you do?</p>"');
 });
+
+test('markdownToHTML - email address', () => {
+  expect(
+    markdownToHTML(`henri@test.fr`)
+  ).toMatchInlineSnapshot('"<p>henri@test.fr</p>"');
+});
