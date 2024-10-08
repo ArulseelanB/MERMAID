@@ -55,7 +55,7 @@ export function markdownToLines(markdown: string, config: MermaidConfig = {}): M
         processNode(contentNode as MarkedToken, parentType);
       });
     } else {
-      lines[currentLine].push({ content: node.raw, type: parentType })
+      lines[currentLine].push({ content: node.raw, type: parentType });
     }
   }
 
